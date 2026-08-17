@@ -1,0 +1,38 @@
+Please execute this task directly — do the analysis now, rather than first describing your plan, summarizing what you're about to do, or asking permission to proceed. If a genuine capability limitation prevents part of this (e.g. no web search available for checking role/salary norms), say so plainly and do as much as you actually can.
+
+Analyze my career background as a career strategist and executive recruiter would. Review my full history — job titles, industries, responsibilities, accomplishments, leadership experience, technical knowledge, transferable skills, and the progression of my career. My goal is to identify strong career paths beyond the roles I've traditionally pursued — do not limit recommendations to obvious next-step titles based on my current or most recent role.
+
+Here's my background:
+
+Director of Business Development, Ironclad Cyber Solutions (2019-present). Lead a 6-person BD team selling OT/ICS cybersecurity assessments and managed detection services to industrial clients (manufacturing, energy, water utilities). Grew annual bookings from $3M to $14M over 5 years. Built and ran the partner channel program with 3 major systems integrators. Personally closed the company's two largest deals ever ($1.8M and $2.4M), both multi-year MSAs with Fortune 500 manufacturers. Frequent speaker at S4, ICS Cyber Security Conference, and regional ISAC events - presented 4 times in the last 3 years on OT threat landscape trends. Prior: 6 years as a Federal Systems Engineer at a defense contractor, holds an active DoD Secret clearance (inactive, would need re-investigation), CISSP certified. Manage the BD team's CRM, forecasting, and quarterly board reporting. Known internally as the go-to person for translating technical OT/ICS concepts for non-technical executive buyers.
+
+- Current or most recent title: Director of Business Development
+- Hard constraints — filter every recommendation through these, don't just weigh them loosely: No relocation outside Texas or fully remote roles; prefer to stay in or adjacent to critical infrastructure / industrial sectors given my clearance and OT background
+- Minimum acceptable compensation: $165k base
+- Industry scope: Show me everything, including paths that represent a clean break from my current industry.
+- Retraining tolerance: Do not recommend paths that would realistically require several years of additional schooling or starting over at entry level, unless the opportunity is unusually compelling — flag it explicitly as an exception if so.
+
+Complete the analysis in these sections:
+
+**1. Career Profile Assessment**
+Summarize my professional profile based only on the evidence in my background above. Identify: my strongest areas of expertise; my most valuable transferable skills; leadership and strategic capabilities; technical or industry knowledge; customer-facing and revenue-generating experience; communication, consulting, operational, or analytical strengths; evidence of adaptability across industries or functions; and career patterns that may not be immediately obvious. Separate what I am demonstrably good at from what my job titles alone suggest I do.
+
+**2. Career Capital**
+Identify the professional assets I've accumulated throughout my career — things like executive communication, enterprise relationship management, complex sales, technical expertise, consulting, strategic planning, revenue growth, partner/channel development, team leadership, presentation and storytelling, business development, customer success, or program leadership. For each major strength, explain what evidence in my background supports it.
+
+**3. Alternative Career Paths**
+Recommend 8-12 realistic alternative career paths that could leverage my existing experience. Include a mix of: natural adjacent moves; less obvious but highly transferable roles; leadership positions; individual-contributor roles; consulting/advisory opportunities; roles outside my current industry (unless I've restricted that above); and roles where my accumulated experience is an advantage rather than an obstacle. Think like a hiring manager: explain not just what I could theoretically do, but which roles an employer would realistically interview and hire me for today.
+
+**4. Career Path Ranking**
+Rank the recommended paths on: transferability of my current skills; likelihood employers would find my background credible; compensation potential; availability of opportunities; amount of retraining required; long-term career durability; ability to leverage my existing network; and potential for advancement. Present this as a table: Career Path | Fit Score (1-10) | Compensation Potential | Transition Difficulty | Why I Fit.
+
+**5. Hidden Opportunities**
+Identify roles or industries where my background might be unusually valuable but which I may not currently be considering — specifically by looking at intersections between different parts of my career (for example: technical expertise + communication, sales + strategy, technology + executive relationships, operations + customer experience, consulting + enterprise technology). Do not simply match previous job titles to similar job titles — look for combinations of capabilities.
+
+**6. Final Recommendation**
+Conclude with: best immediate career pivot; best higher-compensation opportunity; best long-term career path; best lower-risk transition; most overlooked opportunity; and a career path I should probably avoid. Explain why for each. Be candid and evidence-based, not generic — tie every major recommendation to specific experience found in my background above.
+
+**7. What's Next**
+For my top 3 recommended paths, tell me plainly which of these I should run next and why — don't do the work of these tools yourself here, just point me to the right one: "Target Company Prompt Builder" (to build a researched list of companies hiring for this path), "Resume & Cover Letter Tailoring" (to reposition my existing materials once I have a specific path in mind), and "Interview Prep Guide Builder" (to prepare for the objections a hiring manager would likely raise about this particular pivot, once I've landed an interview).
+
+Don't give generic career advice, and don't recommend anything you can't tie back to specific evidence in my background above.
