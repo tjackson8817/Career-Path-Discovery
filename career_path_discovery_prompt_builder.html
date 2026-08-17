@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Career Path Discovery Prompt Builder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --navy:#0f2d3d;
+    --blue:#1b6fa8;
+    --teal:#0f9b8e;
+    --bg:#f4f7f9;
+    --card:#ffffff;
+    --border:#d7e0e5;
+    --text:#1c2b33;
+    --muted:#5b6b73;
+    --tag-bg:#e7f1f7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
+  header{
+    background:linear-gradient(135deg,var(--navy),var(--blue));
+    color:#fff;
+    padding:24px 32px;
+  }
+  header h1{margin:0 0 4px 0;font-size:22px;}
+  header p{margin:0;opacity:.85;font-size:14px;}
+  .wrap{
+    display:flex;
+    gap:24px;
+    padding:24px;
+    max-width:1400px;
+    margin:0 auto;
+    align-items:flex-start;
+  }
+  .col{flex:1;min-width:0;}
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px 22px;
+    margin-bottom:18px;
+  }
+  fieldset{
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin:0 0 18px 0;
+    padding:14px 16px 16px 16px;
+  }
+  legend{font-weight:600;color:var(--navy);padding:0 6px;font-size:14px;}
+  .field{margin-bottom:14px;}
+  label{
+    display:block;
+    font-weight:600;
+    font-size:13.5px;
+    margin-bottom:5px;
+    color:var(--navy);
+  }
+  .tag{
+    background:var(--tag-bg);
+    color:var(--blue);
+    font-size:10.5px;
+    font-weight:600;
+    padding:2px 7px;
+    border-radius:10px;
+    margin-left:6px;
+    text-transform:uppercase;
+    letter-spacing:.3px;
+  }
+  .tag-req{
+    background:#fdeeea;
+    color:#b23b3b;
+  }
+  .hint{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4;}
+  .hint a{color:var(--blue);}
+  input[type=text], textarea, select{
+    width:100%;
+    padding:9px 10px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:14px;
+    font-family:inherit;
+    background:#fcfdfe;
+  }
+  textarea{resize:vertical;min-height:56px;}
+  .radio-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:2px;}
+  .radio-opt{display:flex;align-items:center;gap:6px;font-size:13.5px;}
+  .radio-opt input{width:auto;}
+  #outputPanel{
+    position:sticky;
+    top:24px;
+  }
+  #promptText{
+    white-space:pre-wrap;
+    font-family:"SFMono-Regular",Consolas,Menlo,monospace;
+    font-size:12.5px;
+    background:#0f2d3d;
+    color:#dff1ec;
+    padding:16px;
+    border-radius:8px;
+    max-height:620px;
+    overflow-y:auto;
+    line-height:1.5;
+  }
+  .btn-row{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  button{
+    cursor:pointer;
+    border:none;
+    border-radius:6px;
+    padding:9px 16px;
+    font-size:13.5px;
+    font-weight:600;
+    font-family:inherit;
+  }
+  .btn-primary{background:var(--teal);color:#fff;}
+  .btn-primary:hover{background:#0c8579;}
+  .btn-secondary{background:var(--tag-bg);color:var(--blue);}
+  .btn-secondary:hover{background:#d9e9f2;}
+  .btn-danger{background:#fbeaea;color:#b23b3b;}
+  .btn-danger:hover{background:#f6d9d9;}
+  .stat-line{font-size:12px;color:var(--muted);margin-bottom:10px;}
+  #placeholder{color:var(--muted);font-style:italic;font-size:13.5px;}
+  .row{padding:0 24px;max-width:1400px;margin:0 auto;}
+  .divider{height:1px;background:var(--border);margin:16px 0;}
+  .next-steps{
+    margin-top:20px;padding:14px 16px;background:#fcfdfe;
+    border:1px solid var(--border);border-radius:8px;
+  }
+  .next-steps p{margin:0 0 8px 0;font-size:13px;color:var(--text);}
+  .next-steps ul{margin:0 0 0 18px;padding:0;font-size:13px;color:var(--text);line-height:1.6;}
+
+  @media (max-width: 860px){
+    .wrap{flex-direction:column;padding:14px;gap:14px;}
+    .row{padding:0 14px;}
+    #outputPanel{position:static;}
+    #promptText{max-height:340px;font-size:12px;}
+    header{padding:18px 16px;}
+    header h1{font-size:19px;}
+    .card{padding:16px 14px;}
+    .radio-row{gap:12px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Career Path Discovery Prompt Builder</h1>
+  <p>Step 0 — for when you're not sure what to target yet. Paste your background, get a ranked set of alternative career paths grounded in your actual experience, before you move on to Target Company Research.</p>
+</header>
+
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <fieldset>
+        <legend>Your background</legend>
+
+        <div class="field">
+          <label for="background">Career background <span class="tag tag-req">required</span></label>
+          <textarea id="background" rows="8" placeholder="Paste your resume, your LinkedIn About + Experience sections, or just a written summary of your career history — job titles, industries, responsibilities, accomplishments, leadership experience, and anything technical or customer-facing. The more real detail here, the less this leans on generic pattern-matching."></textarea>
+          <p class="hint" id="backgroundCountHint">Not a file upload — paste text directly. No length limit, but skip the objective/summary boilerplate and paste the substance: what you actually did, at each job.</p>
+        </div>
+
+        <div class="field">
+          <label for="currentRole">Current or most recent title <span class="tag">optional</span></label>
+          <input type="text" id="currentRole" placeholder="e.g. Director of Business Development">
+        </div>
+
+        <div class="field">
+          <label for="constraints">Anything off the table <span class="tag">optional</span></label>
+          <textarea id="constraints" placeholder="e.g. no relocation outside Texas, no travel over 25%, no people-management roles, must stay remote-eligible"></textarea>
+          <p class="hint">Hard constraints Claude should filter every recommendation through, not just weigh loosely.</p>
+        </div>
+
+        <div class="field">
+          <label for="compFloor">Minimum acceptable compensation <span class="tag">optional</span></label>
+          <input type="text" id="compFloor" placeholder="e.g. $140k base">
+        </div>
+
+        <div class="field">
+          <label>Stay within my current industry?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="industryLock" value="no" checked> No — show me everything, including a clean break</label>
+            <label class="radio-opt"><input type="radio" name="industryLock" value="yes"> Yes — adjacent roles within my current industry only</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Rule out paths that need years of additional schooling or an entry-level restart?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="ruleOutSchooling" value="yes" checked> Yes (default)</label>
+            <label class="radio-opt"><input type="radio" name="ruleOutSchooling" value="no"> No — show those too if they're a strong fit</label>
+          </div>
+          <p class="hint">"Yes" still allows an unusually compelling exception through if Claude thinks one is worth flagging — it just isn't the default lens.</p>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="col">
+
+    <div class="card">
+      <fieldset>
+        <legend>Output scope</legend>
+
+        <div class="field">
+          <label for="numPaths">How many alternative paths to surface</label>
+          <input type="text" id="numPaths" value="8-12">
+        </div>
+
+        <div class="field">
+          <label>Include a ranked fit table?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="includeRanking" value="yes" checked> Yes</label>
+            <label class="radio-opt"><input type="radio" name="includeRanking" value="no"> No</label>
+          </div>
+          <p class="hint">Scores each path on transferability, credibility with employers, compensation potential, availability of roles, retraining needed, durability, network leverage, and advancement potential.</p>
+        </div>
+
+        <div class="field">
+          <label>Include a "Hidden Opportunities" section?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="includeHidden" value="yes" checked> Yes</label>
+            <label class="radio-opt"><input type="radio" name="includeHidden" value="no"> No</label>
+          </div>
+          <p class="hint">Looks for roles that sit at the intersection of two or more of your capabilities (e.g. technical expertise + communication) rather than just matching past titles to similar titles.</p>
+        </div>
+
+        <div class="field">
+          <label>Include a Final Recommendation summary?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="includeFinal" value="yes" checked> Yes</label>
+            <label class="radio-opt"><input type="radio" name="includeFinal" value="no"> No</label>
+          </div>
+          <p class="hint">Best immediate pivot, best higher-compensation path, best long-term path, best lower-risk path, most overlooked opportunity, and one path to probably avoid — each with a reason.</p>
+        </div>
+
+        <div class="field">
+          <label>Include next-step routing to the other JobRadar tools?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="includeRouting" value="yes" checked> Yes</label>
+            <label class="radio-opt"><input type="radio" name="includeRouting" value="no"> No</label>
+          </div>
+          <p class="hint">This tool stops at "here's what to go after and why" — it doesn't rewrite your resume, LinkedIn, or prep you for objections. That's Target Company Prompt Builder, Resume & Cover Letter Tailoring, and Interview Prep Guide Builder's job. "Yes" has Claude close by naming, for your top 3 paths, which of those tools to run next.</p>
+        </div>
+      </fieldset>
+
+      <button class="btn-danger" id="resetBtn">Reset all fields</button>
+    </div>
+  </div>
+
+  <div class="col" id="outputPanel">
+    <div class="card">
+      <div class="btn-row">
+        <button class="btn-primary" id="copyBtn">Copy prompt</button>
+        <button class="btn-secondary" id="downloadBtn">Download .txt</button>
+      </div>
+      <div class="stat-line"><span id="fieldCount">0</span> of 5 optional fields filled in</div>
+      <div id="promptText"><span id="placeholder">Paste your career background above to see your prompt appear here.</span></div>
+
+      <div class="next-steps">
+        <p><strong>What this tool is for:</strong> figuring out <em>which</em> role to go after when you're not sure — not tailoring materials for a role you've already picked.</p>
+        <ul>
+          <li>Not sure what to target next → start here</li>
+          <li>Know your target, need companies → Target Company Prompt Builder</li>
+          <li>Have a posting, need materials → Resume &amp; Cover Letter Tailoring / Outreach Message Builder</li>
+          <li>Have an interview, need prep → Interview Prep Guide Builder</li>
+          <li>Have an offer → Salary Negotiator</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const fieldCountEl = document.getElementById('fieldCount');
+const promptTextEl = document.getElementById('promptText');
+
+function val(id){ return document.getElementById(id).value.trim(); }
+function radioVal(name){
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : '';
+}
+
+function buildPrompt(){
+  const background = val('background');
+  const currentRole = val('currentRole');
+  const constraints = val('constraints');
+  const compFloor = val('compFloor');
+  const industryLock = radioVal('industryLock');
+  const ruleOutSchooling = radioVal('ruleOutSchooling') !== 'no'; // default true
+  const numPaths = val('numPaths') || '8-12';
+  const includeRanking = radioVal('includeRanking') !== 'no'; // default true
+  const includeHidden = radioVal('includeHidden') !== 'no'; // default true
+  const includeFinal = radioVal('includeFinal') !== 'no'; // default true
+  const includeRouting = radioVal('includeRouting') !== 'no'; // default true
+
+  let filled = 0;
+  [currentRole, constraints, compFloor].forEach(v => { if(v) filled++; });
+  if(industryLock === 'yes') filled++;
+  if(!ruleOutSchooling) filled++;
+  fieldCountEl.textContent = filled;
+
+  if(!background) return null;
+
+  let lines = [];
+  lines.push(`Please execute this task directly — do the analysis now, rather than first describing your plan, summarizing what you're about to do, or asking permission to proceed. If a genuine capability limitation prevents part of this (e.g. no web search available for checking role/salary norms), say so plainly and do as much as you actually can.`);
+  lines.push("");
+  lines.push(`Analyze my career background as a career strategist and executive recruiter would. Review my full history — job titles, industries, responsibilities, accomplishments, leadership experience, technical knowledge, transferable skills, and the progression of my career. My goal is to identify strong career paths beyond the roles I've traditionally pursued — do not limit recommendations to obvious next-step titles based on my current or most recent role.`);
+  lines.push("");
+  lines.push(`Here's my background:`);
+  lines.push("");
+  lines.push(background);
+  lines.push("");
+  if(currentRole) lines.push(`- Current or most recent title: ${currentRole}`);
+  if(constraints) lines.push(`- Hard constraints — filter every recommendation through these, don't just weigh them loosely: ${constraints}`);
+  if(compFloor) lines.push(`- Minimum acceptable compensation: ${compFloor}`);
+  lines.push(`- Industry scope: ${industryLock === 'yes' ? 'Stay within my current industry — adjacent roles only, no clean break into an unrelated industry.' : 'Show me everything, including paths that represent a clean break from my current industry.'}`);
+  lines.push(`- Retraining tolerance: ${ruleOutSchooling ? "Do not recommend paths that would realistically require several years of additional schooling or starting over at entry level, unless the opportunity is unusually compelling — flag it explicitly as an exception if so." : "Show strong-fit paths even if they'd require significant additional schooling or an entry-level restart — just be clear about that cost."}`);
+
+  lines.push("");
+  lines.push(`Complete the analysis in these sections:`);
+  lines.push("");
+
+  lines.push(`**1. Career Profile Assessment**`);
+  lines.push(`Summarize my professional profile based only on the evidence in my background above. Identify: my strongest areas of expertise; my most valuable transferable skills; leadership and strategic capabilities; technical or industry knowledge; customer-facing and revenue-generating experience; communication, consulting, operational, or analytical strengths; evidence of adaptability across industries or functions; and career patterns that may not be immediately obvious. Separate what I am demonstrably good at from what my job titles alone suggest I do.`);
+  lines.push("");
+
+  lines.push(`**2. Career Capital**`);
+  lines.push(`Identify the professional assets I've accumulated throughout my career — things like executive communication, enterprise relationship management, complex sales, technical expertise, consulting, strategic planning, revenue growth, partner/channel development, team leadership, presentation and storytelling, business development, customer success, or program leadership. For each major strength, explain what evidence in my background supports it.`);
+  lines.push("");
+
+  lines.push(`**3. Alternative Career Paths**`);
+  lines.push(`Recommend ${numPaths} realistic alternative career paths that could leverage my existing experience. Include a mix of: natural adjacent moves; less obvious but highly transferable roles; leadership positions; individual-contributor roles; consulting/advisory opportunities; roles outside my current industry (unless I've restricted that above); and roles where my accumulated experience is an advantage rather than an obstacle. Think like a hiring manager: explain not just what I could theoretically do, but which roles an employer would realistically interview and hire me for today.`);
+  lines.push("");
+
+  if(includeRanking){
+    lines.push(`**4. Career Path Ranking**`);
+    lines.push(`Rank the recommended paths on: transferability of my current skills; likelihood employers would find my background credible; compensation potential; availability of opportunities; amount of retraining required; long-term career durability; ability to leverage my existing network; and potential for advancement. Present this as a table: Career Path | Fit Score (1-10) | Compensation Potential | Transition Difficulty | Why I Fit.`);
+    lines.push("");
+  }
+
+  if(includeHidden){
+    lines.push(`**5. Hidden Opportunities**`);
+    lines.push(`Identify roles or industries where my background might be unusually valuable but which I may not currently be considering — specifically by looking at intersections between different parts of my career (for example: technical expertise + communication, sales + strategy, technology + executive relationships, operations + customer experience, consulting + enterprise technology). Do not simply match previous job titles to similar job titles — look for combinations of capabilities.`);
+    lines.push("");
+  }
+
+  if(includeFinal){
+    lines.push(`**6. Final Recommendation**`);
+    lines.push(`Conclude with: best immediate career pivot; best higher-compensation opportunity; best long-term career path; best lower-risk transition; most overlooked opportunity; and a career path I should probably avoid. Explain why for each. Be candid and evidence-based, not generic — tie every major recommendation to specific experience found in my background above.`);
+    lines.push("");
+  }
+
+  if(includeRouting){
+    lines.push(`**7. What's Next**`);
+    lines.push(`For my top 3 recommended paths, tell me plainly which of these I should run next and why — don't do the work of these tools yourself here, just point me to the right one: "Target Company Prompt Builder" (to build a researched list of companies hiring for this path), "Resume & Cover Letter Tailoring" (to reposition my existing materials once I have a specific path in mind), and "Interview Prep Guide Builder" (to prepare for the objections a hiring manager would likely raise about this particular pivot, once I've landed an interview).`);
+    lines.push("");
+  }
+
+  lines.push(`Don't give generic career advice, and don't recommend anything you can't tie back to specific evidence in my background above.`);
+
+  return lines.join("\n");
+}
+
+function updateBackgroundHint(){
+  const hintEl = document.getElementById('backgroundCountHint');
+  const raw = val('background');
+  if(!raw){
+    hintEl.textContent = "Not a file upload — paste text directly. No length limit, but skip the objective/summary boilerplate and paste the substance: what you actually did, at each job.";
+    return;
+  }
+  const words = raw.split(/\s+/).filter(Boolean).length;
+  if(words < 60){
+    hintEl.textContent = `${words} words pasted — this is fairly thin for a full profile assessment. More detail (specific accomplishments, numbers, technologies, team sizes) will sharpen every section below.`;
+  } else {
+    hintEl.textContent = `${words} words pasted.`;
+  }
+}
+
+function render(){
+  const prompt = buildPrompt();
+  if(prompt === null){
+    promptTextEl.innerHTML = '<span id="placeholder">Paste your career background above to see your prompt appear here.</span>';
+  } else {
+    promptTextEl.textContent = prompt;
+  }
+  updateBackgroundHint();
+}
+
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('input', render);
+  el.addEventListener('change', render);
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const prompt = buildPrompt();
+  if(!prompt) return;
+  navigator.clipboard.writeText(prompt).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = original, 1500);
+  }).catch(() => {
+    alert('Clipboard blocked by your browser — use the Download .txt button instead.');
+  });
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const prompt = buildPrompt();
+  if(!prompt) return;
+  const blob = new Blob([prompt], {type: 'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'career_path_discovery_prompt.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if(!confirm('Clear all fields on the form?')) return;
+  document.querySelectorAll('input[type=text], textarea').forEach(el => el.value = '');
+  document.getElementById('numPaths').value = '8-12';
+  document.querySelector('input[name="industryLock"][value="no"]').checked = true;
+  document.querySelector('input[name="ruleOutSchooling"][value="yes"]').checked = true;
+  document.querySelector('input[name="includeRanking"][value="yes"]').checked = true;
+  document.querySelector('input[name="includeHidden"][value="yes"]').checked = true;
+  document.querySelector('input[name="includeFinal"][value="yes"]').checked = true;
+  document.querySelector('input[name="includeRouting"][value="yes"]').checked = true;
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
