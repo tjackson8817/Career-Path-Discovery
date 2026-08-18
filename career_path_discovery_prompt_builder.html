@@ -211,7 +211,8 @@
 
         <div class="field">
           <label for="numPaths">How many alternative paths to surface</label>
-          <input type="text" id="numPaths" value="8-12">
+          <input type="text" id="numPaths" value="1-4">
+          <p class="hint">1-4 keeps the analysis focused and faster to read. You can ask for more (8-12, or any number) — Claude will still do it, just with more depth per path and a longer response.</p>
         </div>
 
         <div class="field">
@@ -304,7 +305,7 @@ function buildPrompt(){
   const compFloor = val('compFloor');
   const industryLock = radioVal('industryLock');
   const ruleOutSchooling = radioVal('ruleOutSchooling') !== 'no'; // default true
-  const numPaths = val('numPaths') || '8-12';
+  const numPaths = val('numPaths') || '1-4';
   const includeRanking = radioVal('includeRanking') !== 'no'; // default true
   const includeHidden = radioVal('includeHidden') !== 'no'; // default true
   const includeFinal = radioVal('includeFinal') !== 'no'; // default true
@@ -442,7 +443,7 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
 document.getElementById('resetBtn').addEventListener('click', () => {
   if(!confirm('Clear all fields on the form?')) return;
   document.querySelectorAll('input[type=text], textarea').forEach(el => el.value = '');
-  document.getElementById('numPaths').value = '8-12';
+  document.getElementById('numPaths').value = '1-4';
   document.querySelector('input[name="industryLock"][value="no"]').checked = true;
   document.querySelector('input[name="ruleOutSchooling"][value="yes"]').checked = true;
   document.querySelector('input[name="includeRanking"][value="yes"]').checked = true;
