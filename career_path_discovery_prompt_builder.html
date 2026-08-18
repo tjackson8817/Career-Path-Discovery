@@ -249,6 +249,15 @@
           </div>
           <p class="hint">This tool stops at "here's what to go after and why" — it doesn't rewrite your resume, LinkedIn, or prep you for objections. That's Target Company Prompt Builder, Resume & Cover Letter Tailoring, and Interview Prep Guide Builder's job. "Yes" has Claude close by naming, for your top 3 paths, which of those tools to run next.</p>
         </div>
+
+        <div class="field">
+          <label>Output format</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="outputFormat" value="chat" checked> Text in chat</label>
+            <label class="radio-opt"><input type="radio" name="outputFormat" value="docx"> Downloadable Word document</label>
+          </div>
+          <p class="hint">"Downloadable Word document" requires the Code execution and file creation setting (Settings → Capabilities) and only works in Claude itself — pasting into another AI tool will fall back to a chat response regardless of this choice.</p>
+        </div>
       </fieldset>
 
       <button class="btn-danger" id="resetBtn">Reset all fields</button>
@@ -300,6 +309,7 @@ function buildPrompt(){
   const includeHidden = radioVal('includeHidden') !== 'no'; // default true
   const includeFinal = radioVal('includeFinal') !== 'no'; // default true
   const includeRouting = radioVal('includeRouting') !== 'no'; // default true
+  const outputFormat = radioVal('outputFormat') || 'chat';
 
   let filled = 0;
   [currentRole, constraints, compFloor].forEach(v => { if(v) filled++; });
@@ -361,6 +371,11 @@ function buildPrompt(){
   if(includeRouting){
     lines.push(`**7. What's Next**`);
     lines.push(`For my top 3 recommended paths, tell me plainly which of these I should run next and why — don't do the work of these tools yourself here, just point me to the right one: "Target Company Prompt Builder" (to build a researched list of companies hiring for this path), "Resume & Cover Letter Tailoring" (to reposition my existing materials once I have a specific path in mind), and "Interview Prep Guide Builder" (to prepare for the objections a hiring manager would likely raise about this particular pivot, once I've landed an interview).`);
+    lines.push("");
+  }
+
+  if(outputFormat === 'docx'){
+    lines.push(`Output format: produce this as a downloadable Word document, not a chat response — proper headings for each section, a real Word table (not plain text) for the Career Path Ranking table if included, and clean, readable formatting throughout.`);
     lines.push("");
   }
 
@@ -434,6 +449,7 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   document.querySelector('input[name="includeHidden"][value="yes"]').checked = true;
   document.querySelector('input[name="includeFinal"][value="yes"]').checked = true;
   document.querySelector('input[name="includeRouting"][value="yes"]').checked = true;
+  document.querySelector('input[name="outputFormat"][value="chat"]').checked = true;
   render();
 });
 
