@@ -36,7 +36,9 @@ Have ready:
 
 ### Output scope
 
-**How many alternative paths to surface** — defaults to 8–12. Adjust up or down.
+**How many alternative paths to surface** — defaults to 1–4, which keeps the analysis focused and faster to read. You can ask for more (the tool's own hint suggests 8–12 as a deeper alternative, or any number) — Claude will still do it, just with a longer response and more depth per path.
+
+**Output format** — "Text in chat" (default) or "Downloadable Word document." The Word document option requires the Code execution and file creation setting (Settings → Capabilities) and only works in Claude itself — pasting the prompt into another AI tool falls back to a chat response regardless of this choice.
 
 **Include a ranked fit table?** — scores each path on transferability, employer credibility, compensation potential, availability, retraining required, durability, network leverage, and advancement potential. On by default.
 
@@ -58,7 +60,7 @@ When you paste the generated prompt into Claude, the response is organized into 
 6. **Final Recommendation** *(if enabled)* — the six-way breakdown described above.
 7. **What's Next** *(if enabled)* — routing for your top 3 paths.
 
-This is a chat response, not a generated file — there's no document or spreadsheet output from this particular tool.
+By default this comes back as a chat response. If you chose "Downloadable Word document" as the output format, Claude instead builds a proper .docx — real headings per section and a real Word table for the Career Path Ranking, not plain text — which requires the Code execution and file creation setting to be on.
 
 ## What this tool intentionally doesn't do
 
