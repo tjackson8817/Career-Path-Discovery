@@ -21,7 +21,7 @@ This tool stops at "here's what to go after and why." It doesn't rewrite your re
 The page is a single form with two fieldsets:
 
 1. **Your background** — paste your resume, LinkedIn About/Experience sections, or a written summary of your career history. This is the only required field; everything else is optional. You can also add hard constraints (things genuinely off the table, not just preferences), a minimum compensation floor, whether to restrict the analysis to your current industry, and whether to rule out paths that would require years of additional schooling or an entry-level restart.
-2. **Output scope** — toggle which sections the generated prompt asks for: how many paths to surface (defaults to 1–4, adjustable — the tool's own hint suggests 8–12 as a deeper alternative), a ranked fit table, a "Hidden Opportunities" section (roles at the intersection of two or more of your capabilities, not just title-matching), a Final Recommendation summary, and next-step routing to the other JobRadar tools. The generated prompt always asks Claude for a downloadable Word document (requires the Code execution and file creation setting in Claude).
+2. **Output scope** — toggle which sections the generated prompt asks for: a ranked fit table, a "Hidden Opportunities" section (roles at the intersection of two or more of your capabilities, not just title-matching), a Final Recommendation summary, and next-step routing to the other JobRadar tools.
 
 The live output panel updates as you type. Copy the prompt or download it as a `.txt`, then paste it into a Claude conversation.
 
@@ -29,13 +29,11 @@ The live output panel updates as you type. Copy the prompt or download it as a `
 
 1. **Career Profile Assessment** — your strongest areas of expertise, most valuable transferable skills, leadership/strategic capabilities, and career patterns that may not be immediately obvious, separating what you're demonstrably good at from what your job titles alone suggest.
 2. **Career Capital** — the professional assets you've accumulated (executive communication, complex sales, technical expertise, partner development, and so on), each tied to specific evidence in your background.
-3. **Alternative Career Paths** — 1–4 realistic paths by default (adjustable — ask for 8–12 or any number for a deeper pass), mixing natural adjacent moves, less obvious but highly transferable roles, leadership and individual-contributor options, consulting/advisory work, and roles outside your current industry — evaluated the way a hiring manager actually would, not just what you could theoretically do.
+3. **Alternative Career Paths** — 8–12 realistic paths by default (adjustable), mixing natural adjacent moves, less obvious but highly transferable roles, leadership and individual-contributor options, consulting/advisory work, and roles outside your current industry — evaluated the way a hiring manager actually would, not just what you could theoretically do.
 4. **Career Path Ranking** *(optional)* — a table scoring each path on transferability, employer credibility, compensation potential, availability, retraining required, durability, network leverage, and advancement potential.
 5. **Hidden Opportunities** *(optional)* — roles at the intersection of two or more of your capabilities (e.g. technical expertise + communication, sales + strategy) rather than a title-to-title match.
 6. **Final Recommendation** *(optional)* — best immediate pivot, best higher-compensation path, best long-term path, best lower-risk path, most overlooked opportunity, and one path to probably avoid, each with a reason.
 7. **What's Next** *(optional)* — for your top 3 paths, which JobRadar tool to run next and why.
-
-The generated prompt always asks Claude to build a proper .docx, with real headings and a real Word table for the ranking, instead of a plain chat response.
 
 ## Important notes
 
@@ -43,7 +41,6 @@ The generated prompt always asks Claude to build a proper .docx, with real headi
 - Not a file upload — paste your background as text directly. More real detail (specific accomplishments, numbers, technologies, team sizes) produces a sharper analysis; generic resume-objective boilerplate doesn't give Claude much to work with.
 - This tool deliberately does **not** cover resume rewriting, LinkedIn repositioning, or interview objection-handling — see "Where this fits" above for which tool owns each of those.
 - Constraints and the compensation floor are instructions to Claude, not a guaranteed filter — spot-check that recommendations actually respect them.
-- The Word document output requires the Code execution and file creation setting in Claude (Settings → Capabilities) and only works in Claude itself — pasting the prompt into another AI tool falls back to a chat response regardless of this setting.
 
 ## Files in this repo
 
