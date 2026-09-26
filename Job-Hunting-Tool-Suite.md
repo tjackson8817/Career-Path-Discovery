@@ -29,7 +29,10 @@ Profile Builder added as a third ongoing tool August 17, 2026; Target
 Company Prompt Builder section updated August 18, 2026 to add the
 Department Contact Finder step; Interview Prep Guide Builder section
 updated September 1, 2026 to add the Candidate SWOT Analysis and the
-optional STAR Stories field)
+optional STAR Stories field; Career Path Discovery Prompt Builder section
+updated September 26, 2026 to add Target Pivot mode, a resume-file
+attach option, and pivot resume repositioning with a hand-off to Resume
+& Cover Letter Tailoring)
 
 > **Before You Start — One Claude Setting**
 >
@@ -155,8 +158,10 @@ a genuinely useful result:
 - Not sure what to target yet? Start with Career Path Discovery Prompt
   Builder instead — it analyzes your real background and surfaces
   realistic alternative paths, then points you back to Step 1 once
-  you've picked one. Already know your target? Skip straight to the next
-  bullet.
+  you've picked one. Already know the pivot you want (e.g. Marketing →
+  Sales)? Use its Target Pivot mode to test the move and reposition your
+  resume for it. Already know your target and just need companies? Skip
+  straight to the next bullet.
 
 - Start with Target Company Prompt Builder. Fill in your starting point
   and purpose, generate the prompt, run it in Claude with Web search on,
@@ -194,7 +199,7 @@ a genuinely useful result:
 
 | **Tool**                                         | **Step**                | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                | **Output**                                                                      | **Key Claude Setting**                                           |
 |--------------------------------------------------|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|------------------------------------------------------------------|
-| **Career Path Discovery Prompt Builder**         | Step 0 · Discover       | Optional, for when you're not sure what to target yet. Analyzes your real career background like a strategist and executive recruiter would, and surfaces alternative paths (1-4 by default, adjustable) — ranked on transferability, credibility, comp potential, and more — pointing you to Step 1 once you've picked one.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Prompt → paste into Claude → downloadable Word doc of ranked paths                  | Web search recommended, not required; Code execution required             |
+| **Career Path Discovery Prompt Builder**         | Step 0 · Discover       | Optional. Two modes: Discover surfaces alternative paths (1-4 by default, adjustable) when you're not sure what to target; Target Pivot tests a move you already have in mind (e.g. Engineering → Sales) and repositions your resume for it — skill translation, bullet rewrites, a gap outline, and a hand-off block for Resume & Cover Letter Tailoring — while still surfacing adjacent careers. | Prompt → paste into Claude → downloadable Word doc of ranked paths (+ pivot repositioning in Target Pivot mode) | Web search recommended, not required; Code execution required             |
 | **Target Company Prompt Builder**                | Step 1 · Research       | Four linked prompts on one page: an optional wide-net **Bulk Company Pull** (cheap, flat candidate list to prune by hand), the main **Full Research Tracker** (researches and ranks companies via a competitor-cascade discovery method — not NAICS-code search; builds a formatted Excel tracker, 31–36 columns, with a computed Suggested Priority Rank; optional manual two-tier output), **LinkedIn Contact Enrichment** for warm introduction paths, and **Department Contact Finder** for named, tier-ranked contacts at a company via live web search. | Prompt(s) → paste into Claude → .xlsx tracker (+ optional flat bulk-pull .xlsx / department-contacts .xlsx) | Web search; Code execution for the .xlsx                         |
 | **Job Posting Finder**                           | Step 2 · Verify         | Finds real, current job postings — real titles, real URLs. Standard mode (default) title-searches up to 15 companies at once; Senior/Executive Search mode instead runs a broad Triage pass (~30 companies, status only) then a verified 5-company Deep Dive. Every mode now verifies any promising lead by direct link check before reporting it, and auto-flags KPMG/Accenture/EY leads as needing extra scrutiny.                                           | Prompt → paste into Claude → postings table or .xlsx                            | Web search (required); Code execution if .xlsx chosen            |
 | **Resume & Cover Letter Tailoring**              | Step 3a · Apply/Connect | Tailors your actual resume and cover letter to one posting — keyword gap analysis, bullet rewrites, traditional letter and/or a two-column Qualifications Match Letter, plus optional Pivot Positioning Notes for a genuine career-direction change. Can also produce an updated resume with the suggestions actually applied.                                                                                                                                                                                                              | Prompt → paste into Claude → tailored documents                                 | Web search if recruiter ID is on; Code execution if .docx chosen |
@@ -209,24 +214,46 @@ a genuinely useful result:
 
 **STEP 0 · DISCOVER (OPTIONAL)**
 
-For when you're not sure what to target yet — every other tool in the
-suite assumes you already know the role you're chasing. Paste your
-career background, and the generated prompt asks Claude to analyze it
-like a career strategist and executive recruiter would: identifying your
-real strengths and transferable skills, then surfacing realistic
-alternative career paths grounded in evidence, not generic advice. Once
-you've picked a direction, it hands off cleanly to Step 1 — it doesn't
-try to also rewrite your resume or coach you through objections, since
-Resume & Cover Letter Tailoring and Interview Prep Guide Builder already
-do that well.
+For when you're not sure what to target yet, or when you already have a
+pivot in mind and want to know whether it's realistic and how to
+position for it. Paste your career background (or attach your resume
+file in Claude), and the generated prompt asks Claude to analyze it like
+a career strategist and executive recruiter would: identifying your real
+strengths and transferable skills, then either surfacing realistic
+alternative career paths (Discover mode) or testing a named pivot and
+repositioning your resume for that target function (Target Pivot mode).
+Posting-specific tailoring still belongs to Resume & Cover Letter
+Tailoring, and interview objections to Interview Prep Guide Builder —
+Target Pivot mode hands its repositioning off to the former in
+copy-ready form.
 
 ### Key Sections & Options
 
-- **Your background (required):** paste your resume, LinkedIn
-  About/Experience sections, or a written summary — not a file upload,
-  and no length limit. Real detail (specific accomplishments, numbers,
-  technologies, team sizes) produces a sharper analysis than
-  resume-objective boilerplate.
+- **Your background:** paste your resume, LinkedIn About/Experience
+  sections, or a written summary, with no length limit — or check "I'll
+  attach my resume file directly in Claude" and upload it to the Claude
+  chat with the prompt, which makes the text box optional for extra
+  context. Real detail (specific accomplishments, numbers, technologies,
+  team sizes) produces a sharper analysis than resume-objective
+  boilerplate.
+
+- **What are you looking for?** Discover paths (default) or I have a
+  target pivot in mind. Target Pivot mode adds Pivoting from (optional;
+  inferred if blank) and Pivoting to (required), both with suggestions
+  like Sales, Sales Engineering, Marketing, Engineering, and Customer
+  Success; an optional "what's drawing you to this pivot" field in your
+  own words; and two on-by-default checkboxes — surface adjacent careers
+  alongside the pivot, and include resume repositioning.
+
+- **Resume repositioning (Target Pivot mode):** a Skill Translation
+  table showing how each skill you already have is used differently in
+  the target function (including "hidden" skills your experience shows
+  but your resume never names), Bullet Rewrites beside your verbatim
+  originals, a Positioning Summary, a Gap Outline of every real gap and
+  how to close or handle it, and two copy-ready hand-off blocks for
+  Resume & Cover Letter Tailoring's Additional context and Pivot
+  Positioning Notes fields. Rewording and re-emphasis only — never a new
+  metric, title, employer, tool, or credential.
 
 - **Constraints and scope (all optional):** hard constraints Claude
   filters every recommendation through (not just weighs loosely), a
@@ -254,20 +281,27 @@ do that well.
 ### What You Get Back
 
 A Career Profile Assessment and Career Capital breakdown grounded in
-your pasted background, alternative career paths (1–4 by default,
-adjustable — mixing adjacent moves, less-obvious transferable roles,
-leadership and IC options, and paths outside your current industry
-unless restricted), and — depending
-on which toggles you left on — a ranked fit table, a Hidden Opportunities
-section, a Final Recommendation summary, and a pointer for your top 3
-paths toward the specific suite tool to run next.
+your background. In Discover mode, alternative career paths (1–4 by
+default, adjustable — mixing adjacent moves, less-obvious transferable
+roles, leadership and IC options, and paths outside your current
+industry unless restricted). In Target Pivot mode, a Target Pivot
+Assessment (credible evidence, real gaps, realistic entry title and
+level, bridge roles, comp impact, and a pursue / pursue-via-bridge /
+reconsider verdict), the Resume Repositioning section with its hand-off
+blocks, and adjacent paths compared against your pivot. Then, depending
+on which toggles you left on, a ranked fit table (your pivot listed
+first in Target Pivot mode), a Hidden Opportunities section, a Final
+Recommendation summary, and a pointer for your top 3 paths toward the
+specific suite tool to run next.
 
 ### Worth Knowing
 
-- This tool deliberately stops at "here's what to go after and why" — it
-  doesn't rewrite your resume or LinkedIn (that's Resume & Cover Letter
-  Tailoring) and doesn't prep you for objections about a pivot (that's
-  Interview Prep Guide Builder's Objection Reframing).
+- Discover mode stops at "here's what to go after and why." Target
+  Pivot mode repositions your resume for the target function in general,
+  not for one posting — carry its hand-off blocks into Resume & Cover
+  Letter Tailoring once you have a real posting. Neither mode preps you
+  for interview objections about a pivot (that's Interview Prep Guide
+  Builder's Objection Reframing).
 
 - If a recommended path doesn't trace back to specific evidence in what
   you pasted, push back on it directly in the conversation — the
@@ -552,7 +586,9 @@ acceptable under any framing.
   (never hide), any real skill/certification gaps worth naming, and a
   short honest answer for *why this move* — grounded in a real
   connective thread, not a generic passion statement. Bound by the same
-  no-invention rule as everything else this tool produces.
+  no-invention rule as everything else this tool produces. If you ran Career Path
+  Discovery in Target Pivot mode, paste its hand-off Block 1 into this
+  field and Block 2 into Additional context.
 
 - **Apply the suggestions directly:** two additional checkboxes, nested
   under Gap Analysis and Bullet Rewrites respectively, produce a

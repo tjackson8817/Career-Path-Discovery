@@ -134,6 +134,12 @@
   .next-steps p{margin:0 0 8px 0;font-size:13px;color:var(--text);}
   .next-steps ul{margin:0 0 0 18px;padding:0;font-size:13px;color:var(--text);line-height:1.6;}
 
+  .check-opt{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;font-weight:400;color:var(--text);margin-top:8px;}
+  .check-opt input{width:auto;margin-top:3px;}
+  .pivot-row{display:flex;gap:12px;flex-wrap:wrap;}
+  .pivot-row .field{flex:1;min-width:200px;}
+  .pivot-arrow{align-self:center;font-size:20px;color:var(--blue);padding-top:10px;}
+  #pivotFields{border-left:3px solid var(--teal);padding-left:14px;margin-top:10px;}
   @media (max-width: 860px){
     .wrap{flex-direction:column;padding:14px;gap:14px;}
     .row{padding:0 14px;}
@@ -150,19 +156,28 @@
 
 <header>
   <h1>Career Path Discovery Prompt Builder</h1>
-  <p>Step 0 — for when you're not sure what to target yet. Paste your background, get a ranked set of alternative career paths grounded in your actual experience, before you move on to Target Company Research.</p>
+  <p>Step 0 — for when you're not sure what to target yet. Paste or attach your background, then either discover alternative career paths or test a specific pivot you have in mind (e.g. Marketing → Sales) — grounded in your actual experience, before you move on to Target Company Research.</p>
 </header>
 
 <div class="row">
   <div class="col">
+    <div class="card" id="loadPromptCard">
+      <div class="btn-row" style="margin-bottom:6px;">
+        <button class="btn-secondary" id="loadPromptBtn" type="button">Load a downloaded prompt (.txt) to edit</button>
+        <input type="file" id="loadPromptInput" accept=".txt" style="display:none;">
+      </div>
+      <p class="hint" id="loadPromptStatus">Already generated and downloaded a prompt from this tool? Load it back in here to tweak one field instead of re-pasting everything.</p>
+    </div>
     <div class="card">
       <fieldset>
         <legend>Your background</legend>
 
         <div class="field">
-          <label for="background">Career background <span class="tag tag-req">required</span></label>
+          <label for="background">Career background <span class="tag tag-req" id="bgReqTag">required</span></label>
           <textarea id="background" rows="8" placeholder="Paste your resume, your LinkedIn About + Experience sections, or just a written summary of your career history — job titles, industries, responsibilities, accomplishments, leadership experience, and anything technical or customer-facing. The more real detail here, the less this leans on generic pattern-matching."></textarea>
           <p class="hint" id="backgroundCountHint">Not a file upload — paste text directly. No length limit, but skip the objective/summary boilerplate and paste the substance: what you actually did, at each job.</p>
+          <label class="check-opt"><input type="checkbox" id="attachResume"> I'll attach my resume file (PDF/Word) directly in Claude instead of pasting it</label>
+          <p class="hint">Check this if you'd rather upload your resume file to the Claude chat along with the prompt. The box above becomes optional — use it for anything extra that isn't on your resume (LinkedIn highlights, side projects, context). Nothing is uploaded from this page.</p>
         </div>
 
         <div class="field">
@@ -198,6 +213,44 @@
           <p class="hint">"Yes" still allows an unusually compelling exception through if Claude thinks one is worth flagging — it just isn't the default lens.</p>
         </div>
       </fieldset>
+
+      <fieldset>
+        <legend>What are you looking for?</legend>
+        <div class="field">
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="analysisMode" value="discover" checked> Discover paths — I'm not sure what to target</label>
+            <label class="radio-opt"><input type="radio" name="analysisMode" value="pivot"> I have a target pivot in mind</label>
+          </div>
+          <p class="hint">"Target pivot" tests a specific move you're considering (e.g. Marketing → Sales, Engineering → Sales) and still surfaces the adjacent careers worth considering alongside it.</p>
+        </div>
+
+        <div id="pivotFields" style="display:none;">
+          <div class="pivot-row">
+            <div class="field">
+              <label for="pivotFrom">Pivoting from <span class="tag">optional</span></label>
+              <input type="text" id="pivotFrom" list="functionList" placeholder="e.g. Marketing">
+              <p class="hint">Leave blank and Claude infers it from your background.</p>
+            </div>
+            <div class="pivot-arrow">→</div>
+            <div class="field">
+              <label for="pivotTo">Pivoting to <span class="tag tag-req">required</span></label>
+              <input type="text" id="pivotTo" list="functionList" placeholder="e.g. Sales">
+              <p class="hint">Pick a suggestion or type your own (e.g. "Sales Engineering," "Product Management").</p>
+            </div>
+          </div>
+          <datalist id="functionList">
+            <option value="Sales"><option value="Sales Engineering / Solutions Consulting"><option value="Business Development"><option value="Account Management"><option value="Customer Success"><option value="Marketing"><option value="Product Marketing"><option value="Product Management"><option value="Engineering"><option value="Project / Program Management"><option value="Operations"><option value="Consulting / Advisory"><option value="Finance"><option value="HR / People"><option value="IT"><option value="Cybersecurity"><option value="Data / Analytics"><option value="Education / Training"><option value="Executive Leadership">
+          </datalist>
+          <div class="field">
+            <label for="pivotNotes">What's drawing you to this pivot <span class="tag">optional</span></label>
+            <textarea id="pivotNotes" placeholder="Your own words, e.g. I enjoy the customer-facing side of product launches and want to own a number; open to technical or enterprise sales"></textarea>
+            <p class="hint">Used as context only. Claude won't invent motivations you don't state here.</p>
+          </div>
+          <label class="check-opt"><input type="checkbox" id="includeAdjacent" checked> Also surface adjacent careers I should consider alongside this pivot</label>
+          <label class="check-opt"><input type="checkbox" id="includeResumeRepo" checked> Include resume repositioning for this pivot (skill translation, bullet rewrites, gap outline, and a hand-off block for Resume &amp; Cover Letter Tailoring)</label>
+          <p class="hint">Translates what you already do into how the target function describes and uses the same skill — including skills your resume doesn't label but your experience shows. Ends with two shaded, copy-ready blocks and step-by-step instructions for using them: Block 1 goes in Resume &amp; Cover Letter Tailoring's Pivot Positioning Notes field (check that box first), and Block 2 goes in its <em>Additional context</em> field. Rewording only: nothing new gets added to your history.</p>
+        </div>
+      </fieldset>
     </div>
   </div>
 </div>
@@ -210,7 +263,7 @@
         <legend>Output scope</legend>
 
         <div class="field">
-          <label for="numPaths">How many alternative paths to surface</label>
+          <label for="numPaths" id="numPathsLabel">How many alternative paths to surface</label>
           <input type="text" id="numPaths" value="1-4">
           <p class="hint">1-4 keeps the analysis focused and faster to read. You can ask for more (8-12, or any number) — Claude will still do it, just with more depth per path and a longer response.</p>
         </div>
@@ -267,9 +320,10 @@
       <div id="promptText"><span id="placeholder">Paste your career background above to see your prompt appear here.</span></div>
 
       <div class="next-steps">
-        <p><strong>What this tool is for:</strong> figuring out <em>which</em> role to go after when you're not sure — not tailoring materials for a role you've already picked.</p>
+        <p><strong>What this tool is for:</strong> figuring out <em>which</em> role to go after, or testing a pivot you already have in mind — not tailoring materials to one specific posting.</p>
         <ul>
           <li>Not sure what to target next → start here</li>
+          <li>Know the pivot, need to reposition → start here in Target Pivot mode, then carry the hand-off into Resume &amp; Cover Letter Tailoring</li>
           <li>Know your target, need companies → Target Company Prompt Builder</li>
           <li>Have a posting, need materials → Resume &amp; Cover Letter Tailoring / Outreach Message Builder</li>
           <li>Have an interview, need prep → Interview Prep Guide Builder</li>
@@ -284,6 +338,8 @@
 const fieldCountEl = document.getElementById('fieldCount');
 const promptTextEl = document.getElementById('promptText');
 
+const ATTACH_LINE = '[My resume is attached to this message as a file — read it in full and treat it as my career background, together with anything I add below.]';
+
 function val(id){ return document.getElementById(id).value.trim(); }
 function radioVal(name){
   const el = document.querySelector(`input[name="${name}"]:checked`);
@@ -292,11 +348,18 @@ function radioVal(name){
 
 function buildPrompt(){
   const background = val('background');
+  const attachResume = document.getElementById('attachResume').checked;
   const currentRole = val('currentRole');
   const constraints = val('constraints');
   const compFloor = val('compFloor');
   const industryLock = radioVal('industryLock');
   const ruleOutSchooling = radioVal('ruleOutSchooling') !== 'no'; // default true
+  const pivotMode = radioVal('analysisMode') === 'pivot';
+  const pivotFrom = val('pivotFrom');
+  const pivotTo = val('pivotTo');
+  const pivotNotes = val('pivotNotes');
+  const includeAdjacent = !pivotMode || document.getElementById('includeAdjacent').checked;
+  const includeResumeRepo = pivotMode && document.getElementById('includeResumeRepo').checked;
   const numPaths = val('numPaths') || '1-4';
   const includeRanking = radioVal('includeRanking') !== 'no'; // default true
   const includeHidden = radioVal('includeHidden') !== 'no'; // default true
@@ -309,18 +372,33 @@ function buildPrompt(){
   if(!ruleOutSchooling) filled++;
   fieldCountEl.textContent = filled;
 
-  if(!background) return null;
+  if(!background && !attachResume) return null;
+  if(pivotMode && !pivotTo) return null;
+
+  const fromLabel = pivotFrom || 'my current function';
+  const pivotLabel = `${fromLabel} → ${pivotTo}`;
 
   let lines = [];
   lines.push(`Please execute this task directly — do the analysis now, rather than first describing your plan, summarizing what you're about to do, or asking permission to proceed. If a genuine capability limitation prevents part of this (e.g. no web search available for checking role/salary norms), say so plainly and do as much as you actually can.`);
   lines.push("");
-  lines.push(`Analyze my career background as a career strategist and executive recruiter would. Review my full history — job titles, industries, responsibilities, accomplishments, leadership experience, technical knowledge, transferable skills, and the progression of my career. My goal is to identify strong career paths beyond the roles I've traditionally pursued — do not limit recommendations to obvious next-step titles based on my current or most recent role.`);
+  if(pivotMode){
+    lines.push(`Analyze my career background as a career strategist and executive recruiter would. Review my full history — job titles, industries, responsibilities, accomplishments, leadership experience, technical knowledge, transferable skills, and the progression of my career. My goal is to evaluate a specific pivot I'm considering — from ${pivotFrom || 'my current function (infer it from my background)'} into ${pivotTo} — honestly and realistically${includeAdjacent ? ', and alongside it, to identify the adjacent career paths I should also consider, including ones that may be a stronger fit than the pivot I named' : ''}.`);
+  } else {
+    lines.push(`Analyze my career background as a career strategist and executive recruiter would. Review my full history — job titles, industries, responsibilities, accomplishments, leadership experience, technical knowledge, transferable skills, and the progression of my career. My goal is to identify strong career paths beyond the roles I've traditionally pursued — do not limit recommendations to obvious next-step titles based on my current or most recent role.`);
+  }
   lines.push("");
   lines.push(`Here's my background:`);
   lines.push("");
-  lines.push(background);
+  if(attachResume) lines.push(ATTACH_LINE);
+  if(background) lines.push(background);
   lines.push("");
   if(currentRole) lines.push(`- Current or most recent title: ${currentRole}`);
+  if(pivotMode){
+    lines.push(`- Target pivot: from ${pivotFrom || 'my current function (infer it from my background)'} to ${pivotTo}`);
+    if(pivotNotes) lines.push(`- What's drawing me to this pivot, in my own words: ${pivotNotes}`);
+    lines.push(`- Resume repositioning: ${includeResumeRepo ? 'Include resume repositioning for this pivot.' : 'Skip resume repositioning for this pivot.'}`);
+    lines.push(`- Adjacent careers: ${includeAdjacent ? 'Also surface adjacent careers I should consider alongside this pivot.' : 'Focus on the target pivot only — skip the broader list of alternative paths.'}`);
+  }
   if(constraints) lines.push(`- Hard constraints — filter every recommendation through these, don't just weigh them loosely: ${constraints}`);
   if(compFloor) lines.push(`- Minimum acceptable compensation: ${compFloor}`);
   lines.push(`- Industry scope: ${industryLock === 'yes' ? 'Stay within my current industry — adjacent roles only, no clean break into an unrelated industry.' : 'Show me everything, including paths that represent a clean break from my current industry.'}`);
@@ -330,46 +408,73 @@ function buildPrompt(){
   lines.push(`Complete the analysis in these sections:`);
   lines.push("");
 
-  lines.push(`**1. Career Profile Assessment**`);
+  let n = 0;
+  const sec = title => { n++; lines.push(`**${n}. ${title}**`); };
+
+  sec('Career Profile Assessment');
   lines.push(`Summarize my professional profile based only on the evidence in my background above. Identify: my strongest areas of expertise; my most valuable transferable skills; leadership and strategic capabilities; technical or industry knowledge; customer-facing and revenue-generating experience; communication, consulting, operational, or analytical strengths; evidence of adaptability across industries or functions; and career patterns that may not be immediately obvious. Separate what I am demonstrably good at from what my job titles alone suggest I do.`);
   lines.push("");
 
-  lines.push(`**2. Career Capital**`);
+  sec('Career Capital');
   lines.push(`Identify the professional assets I've accumulated throughout my career — things like executive communication, enterprise relationship management, complex sales, technical expertise, consulting, strategic planning, revenue growth, partner/channel development, team leadership, presentation and storytelling, business development, customer success, or program leadership. For each major strength, explain what evidence in my background supports it.`);
   lines.push("");
 
-  lines.push(`**3. Alternative Career Paths**`);
-  lines.push(`Recommend ${numPaths} realistic alternative career paths that could leverage my existing experience. Include a mix of: natural adjacent moves; less obvious but highly transferable roles; leadership positions; individual-contributor roles; consulting/advisory opportunities; roles outside my current industry (unless I've restricted that above); and roles where my accumulated experience is an advantage rather than an obstacle. Think like a hiring manager: explain not just what I could theoretically do, but which roles an employer would realistically interview and hire me for today.`);
-  lines.push("");
+  if(pivotMode){
+    sec(`Target Pivot Assessment: ${pivotLabel}`);
+    lines.push(`Evaluate the pivot I named as a hiring manager in ${pivotTo} would. Cover: (a) transferable evidence — the specific experience in my background that a ${pivotTo} hiring manager would find credible, tied to what I actually did; (b) real gaps — the skills, experience, credentials, or track record ${pivotTo} roles typically require that my background doesn't show, stated plainly rather than softened; (c) realistic entry point — the specific titles and level an employer would realistically hire me into for ${pivotTo} today (not the most senior title I could imagine), and whether that means a step down in level or pay; (d) bridge roles — any stepping-stone roles that combine my current strengths with ${pivotTo} and make the move more credible (for example, a technical or specialist version of the target function); (e) compensation impact — how the realistic entry point compares with my minimum compensation above, if I gave one; (f) what would close the gaps fastest — specific experience, projects, or credentials worth pursuing, only where a real gap exists; and (g) a candid verdict: pursue directly, pursue via a bridge role, or reconsider — with a fit score from 1-10 and the reason.`);
+    lines.push("");
+  }
+
+  if(includeResumeRepo){
+    sec(`Resume Repositioning for the Pivot: ${pivotLabel}`);
+    lines.push(`Show me how to reposition my existing resume for ${pivotTo} roles in general (not one specific posting — that comes later). Rewording and re-emphasis only: every item must trace to something actually in my background above. Never add a metric, title, employer, tool, credential, client, or scope that isn't there. Cover:`);
+    lines.push(`   (a) Skill Translation — a table with columns: Skill / Capability | Evidence in My Background | How I Use It Now | How ${pivotTo} Uses It | Suggested Resume Wording for ${pivotTo}. Include skills I share with ${pivotTo} but apply differently in my current role (the same skill, a different purpose or audience), and "hidden" skills my experience clearly shows even though my resume never names them — for those, quote or point to the specific evidence so I can verify it.`);
+    lines.push(`   (b) Bullet Rewrites — a table with columns: Original Bullet (verbatim from my background) | Rewritten for ${pivotTo} | What Changed. Pick the 5-8 bullets most relevant to ${pivotTo}. Change emphasis, order, and terminology only; keep every number and fact exactly as stated.`);
+    lines.push(`   (c) Positioning Summary — a 2-3 sentence professional summary aimed at ${pivotTo}, built only from the evidence above, plus 3-5 honest keywords ${pivotTo} recruiters search for that my background genuinely supports.`);
+    lines.push(`   (d) Gap Outline — a table with columns: Gap | Why ${pivotTo} Hiring Managers Care | Must-Have or Nice-to-Have | How to Close It | How to Handle It on My Resume Now. List every real gap between my background and typical ${pivotTo} requirements (skills, experience, credentials, track record). Don't soften a real gap into a non-gap, and never suggest wording that implies I already have something I don't.`);
+    lines.push(`   (e) Hand-off to Resume & Cover Letter Tailoring — two copy-ready plain-text blocks (no tables, no markdown) I can paste straight into that tool when I have a specific ${pivotTo} posting: Block 1, labeled "Pivot description (paste into the Pivot Positioning Notes field)", one sentence naming the move from ${fromLabel} into ${pivotTo}. Block 2, labeled "Additional context (paste into the Additional context field)", under about 250 words, summarizing the skill translations to emphasize, the hidden skills with their evidence, and the real gaps to flag rather than paper over. Write Block 2 in first person, as statements that are true about me based only on my background above. Directly above the two blocks, add a short "How to use these blocks" note with these numbered steps: 1) once you have a specific ${pivotTo} posting, open Resume & Cover Letter Tailoring and paste the posting and your full resume as usual; 2) paste Block 2 into its Additional context field; 3) check Pivot Positioning Notes and paste Block 1 into the field that appears under it; 4) read Block 2 first and delete anything you can't stand behind, because that tool treats Additional context as true about you.`);
+    lines.push("");
+  }
+
+  if(includeAdjacent){
+    sec(pivotMode ? 'Adjacent Career Paths to Consider' : 'Alternative Career Paths');
+    if(pivotMode){
+      lines.push(`Beyond the pivot into ${pivotTo}, recommend ${numPaths} realistic adjacent career paths I should consider alongside it — including any that may be a stronger or lower-risk fit than the pivot I named, and any that get me closer to what's drawing me to ${pivotTo}. Include a mix of: natural adjacent moves; less obvious but highly transferable roles; leadership and individual-contributor options; consulting/advisory opportunities; roles outside my current industry (unless I've restricted that above); and roles where my accumulated experience is an advantage rather than an obstacle. Think like a hiring manager: explain which roles an employer would realistically interview and hire me for today, and for each one, how it compares with the ${pivotTo} pivot.`);
+    } else {
+      lines.push(`Recommend ${numPaths} realistic alternative career paths that could leverage my existing experience. Include a mix of: natural adjacent moves; less obvious but highly transferable roles; leadership positions; individual-contributor roles; consulting/advisory opportunities; roles outside my current industry (unless I've restricted that above); and roles where my accumulated experience is an advantage rather than an obstacle. Think like a hiring manager: explain not just what I could theoretically do, but which roles an employer would realistically interview and hire me for today.`);
+    }
+    lines.push("");
+  }
 
   if(includeRanking){
-    lines.push(`**4. Career Path Ranking**`);
-    lines.push(`Rank the recommended paths on: transferability of my current skills; likelihood employers would find my background credible; compensation potential; availability of opportunities; amount of retraining required; long-term career durability; ability to leverage my existing network; and potential for advancement. Present this as a table: Career Path | Fit Score (1-10) | Compensation Potential | Transition Difficulty | Why I Fit.`);
+    sec('Career Path Ranking');
+    const scope = pivotMode ? (includeAdjacent ? `the target pivot into ${pivotTo} (as its own row, listed first), any bridge roles, and the adjacent paths` : `the target pivot into ${pivotTo} and any bridge roles`) : 'the recommended paths';
+    lines.push(`Rank ${scope} on: transferability of my current skills; likelihood employers would find my background credible; compensation potential; availability of opportunities; amount of retraining required; long-term career durability; ability to leverage my existing network; and potential for advancement. Present this as a table: Career Path | Fit Score (1-10) | Compensation Potential | Transition Difficulty | Why I Fit.`);
     lines.push("");
   }
 
   if(includeHidden){
-    lines.push(`**5. Hidden Opportunities**`);
-    lines.push(`Identify roles or industries where my background might be unusually valuable but which I may not currently be considering — specifically by looking at intersections between different parts of my career (for example: technical expertise + communication, sales + strategy, technology + executive relationships, operations + customer experience, consulting + enterprise technology). Do not simply match previous job titles to similar job titles — look for combinations of capabilities.`);
+    sec('Hidden Opportunities');
+    lines.push(`Identify roles or industries where my background might be unusually valuable but which I may not currently be considering — specifically by looking at intersections between different parts of my career (for example: technical expertise + communication, sales + strategy, technology + executive relationships, operations + customer experience, consulting + enterprise technology).${pivotMode ? ` Include intersections between my current background and ${pivotTo} specifically.` : ''} Do not simply match previous job titles to similar job titles — look for combinations of capabilities.`);
     lines.push("");
   }
 
   if(includeFinal){
-    lines.push(`**6. Final Recommendation**`);
-    lines.push(`Conclude with: best immediate career pivot; best higher-compensation opportunity; best long-term career path; best lower-risk transition; most overlooked opportunity; and a career path I should probably avoid. Explain why for each. Be candid and evidence-based, not generic — tie every major recommendation to specific experience found in my background above.`);
+    sec('Final Recommendation');
+    lines.push(`Conclude with: ${pivotMode ? `a direct verdict on the ${pivotLabel} pivot (pursue directly, pursue via a bridge role, or reconsider); ` : ''}best immediate career pivot; best higher-compensation opportunity; best long-term career path; best lower-risk transition; most overlooked opportunity; and a career path I should probably avoid. Explain why for each. Be candid and evidence-based, not generic — tie every major recommendation to specific experience found in my background above.`);
     lines.push("");
   }
 
   if(includeRouting){
-    lines.push(`**7. What's Next**`);
-    lines.push(`For my top 3 recommended paths, tell me plainly which of these I should run next and why — don't do the work of these tools yourself here, just point me to the right one: "Target Company Prompt Builder" (to build a researched list of companies hiring for this path), "Resume & Cover Letter Tailoring" (to reposition my existing materials once I have a specific path in mind), and "Interview Prep Guide Builder" (to prepare for the objections a hiring manager would likely raise about this particular pivot, once I've landed an interview).`);
+    sec("What's Next");
+    lines.push(`For my top 3 recommended paths${pivotMode ? ` (include the ${pivotTo} pivot if you'd recommend pursuing it)` : ''}, tell me plainly which of these I should run next and why — don't do the work of these tools yourself here, just point me to the right one: "Target Company Prompt Builder" (to build a researched list of companies hiring for this path), "Resume & Cover Letter Tailoring" (to reposition my existing materials once I have a specific path in mind${includeResumeRepo ? ` — for the ${pivotTo} pivot, note that the hand-off blocks above are ready to paste into it, with Pivot Positioning Notes checked` : ''}), and "Interview Prep Guide Builder" (to prepare for the objections a hiring manager would likely raise about this particular pivot, once I've landed an interview).`);
     lines.push("");
   }
 
-  lines.push(`Output format: produce this as a downloadable Word document, not a chat response — proper headings for each section, a real Word table (not plain text) for the Career Path Ranking table if included, and clean, readable formatting throughout.`);
+  lines.push(`Output format: produce this as a downloadable Word document, not a chat response — proper headings for each section, a real Word table (not plain text) for the Career Path Ranking table if included${includeResumeRepo ? ', real Word tables for the Skill Translation, Bullet Rewrites, and Gap Outline, and the two hand-off blocks set apart in a shaded box so they are easy to copy' : ''}, and clean, readable formatting throughout.`);
   lines.push("");
 
-  lines.push(`Don't give generic career advice, and don't recommend anything you can't tie back to specific evidence in my background above.`);
+  lines.push(`Don't give generic career advice, and don't recommend anything you can't tie back to specific evidence in my background above.${pivotMode ? ` For the ${pivotTo} pivot specifically, don't soften a real gap into a non-gap or overstate how ready I am — if it's a stretch, say so plainly and show the most credible route in.` : ''}${includeResumeRepo ? ' Every suggested resume wording must be something I could defend line by line in an interview.' : ''}`);
 
   return lines.join("\n");
 }
@@ -389,10 +494,24 @@ function updateBackgroundHint(){
   }
 }
 
+function syncModeUI(){
+  const pivotMode = radioVal('analysisMode') === 'pivot';
+  document.getElementById('pivotFields').style.display = pivotMode ? 'block' : 'none';
+  document.getElementById('numPathsLabel').textContent = pivotMode ? 'How many adjacent paths to surface (alongside the target pivot)' : 'How many alternative paths to surface';
+  const attach = document.getElementById('attachResume').checked;
+  const tag = document.getElementById('bgReqTag');
+  tag.textContent = attach ? 'optional' : 'required';
+  tag.className = attach ? 'tag' : 'tag tag-req';
+}
+
 function render(){
+  syncModeUI();
   const prompt = buildPrompt();
   if(prompt === null){
-    promptTextEl.innerHTML = '<span id="placeholder">Paste your career background above to see your prompt appear here.</span>';
+    const needsTarget = radioVal('analysisMode') === 'pivot' && !val('pivotTo') && (val('background') || document.getElementById('attachResume').checked);
+    promptTextEl.innerHTML = needsTarget
+      ? '<span id="placeholder">Enter the role or function you\'re pivoting to, above, to see your prompt.</span>'
+      : '<span id="placeholder">Paste your career background above (or check the attach-resume box) to see your prompt appear here.</span>';
   } else {
     promptTextEl.textContent = prompt;
   }
@@ -434,12 +553,143 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   document.querySelectorAll('input[type=text], textarea').forEach(el => el.value = '');
   document.getElementById('numPaths').value = '1-4';
   document.querySelector('input[name="industryLock"][value="no"]').checked = true;
+  document.querySelector('input[name="analysisMode"][value="discover"]').checked = true;
+  document.getElementById('attachResume').checked = false;
+  document.getElementById('includeAdjacent').checked = true;
+  document.getElementById('includeResumeRepo').checked = true;
   document.querySelector('input[name="ruleOutSchooling"][value="yes"]').checked = true;
   document.querySelector('input[name="includeRanking"][value="yes"]').checked = true;
   document.querySelector('input[name="includeHidden"][value="yes"]').checked = true;
   document.querySelector('input[name="includeFinal"][value="yes"]').checked = true;
   document.querySelector('input[name="includeRouting"][value="yes"]').checked = true;
   render();
+});
+
+// ---- Load a previously downloaded .txt prompt back into the form ----
+
+const LOAD_ANCHORS = {
+  currentRole: '- Current or most recent title: ',
+  pivot: '- Target pivot: from ',
+  pivotNotes: "- What's drawing me to this pivot, in my own words: ",
+  adjacent: '- Adjacent careers: ',
+  resumeRepo: '- Resume repositioning: ',
+  constraints: "- Hard constraints — filter every recommendation through these, don't just weigh them loosely: ",
+  compFloor: '- Minimum acceptable compensation: ',
+  industryScope: '- Industry scope: ',
+  retraining: '- Retraining tolerance: ',
+};
+
+function detectValidPrompt(text){
+  return text.includes('Analyze my career background as a career strategist and executive recruiter would.');
+}
+
+// Reads the exact plain-text shape this tool generates and reconstructs field
+// values from it. Works reliably on a prompt downloaded from this tool as-is;
+// heavily hand-edited text may not parse perfectly — review fields after loading.
+function parseLoadedPrompt(text){
+  if(!detectValidPrompt(text)){
+    return { ok:false, reason: "Couldn't recognize this as a prompt generated by this tool." };
+  }
+  const A = LOAD_ANCHORS;
+  const lines = text.split(/\r?\n/);
+  const data = {
+    background:'', currentRole:'', constraints:'', compFloor:'',
+    industryLock:'no', ruleOutSchooling:'yes',
+    analysisMode:'discover', pivotFrom:'', pivotTo:'', pivotNotes:'', includeAdjacent:true, includeResumeRepo:true, attachResume:false
+  };
+  let field = null;
+  let bgLines = [];
+
+  lines.forEach(line => {
+    if(line === "Here's my background:"){ field='background'; bgLines=[]; return; }
+    if(line === ATTACH_LINE){ data.attachResume = true; return; }
+    if(line.startsWith(A.pivot)){
+      data.analysisMode = 'pivot';
+      const m = line.slice(A.pivot.length).match(/^(.*) to (.+)$/);
+      if(m){
+        data.pivotFrom = m[1].startsWith('my current function') ? '' : m[1].trim();
+        data.pivotTo = m[2].trim();
+      }
+      field=null; return;
+    }
+    if(line.startsWith(A.pivotNotes)){ data.pivotNotes = line.slice(A.pivotNotes.length).trim(); field=null; return; }
+    if(line.startsWith(A.resumeRepo)){ data.includeResumeRepo = line.slice(A.resumeRepo.length).startsWith('Include'); field=null; return; }
+    if(line.startsWith(A.adjacent)){ data.includeAdjacent = line.slice(A.adjacent.length).startsWith('Also'); field=null; return; }
+    if(line.startsWith(A.currentRole)){ data.currentRole = line.slice(A.currentRole.length).trim(); field=null; return; }
+    if(line.startsWith(A.constraints)){ data.constraints = line.slice(A.constraints.length).trim(); field=null; return; }
+    if(line.startsWith(A.compFloor)){ data.compFloor = line.slice(A.compFloor.length).trim(); field=null; return; }
+    if(line.startsWith(A.industryScope)){
+      const v = line.slice(A.industryScope.length).trim();
+      data.industryLock = v.startsWith('Stay within') ? 'yes' : 'no';
+      field=null; return;
+    }
+    if(line.startsWith(A.retraining)){
+      const v = line.slice(A.retraining.length).trim();
+      data.ruleOutSchooling = v.startsWith('Do not recommend') ? 'yes' : 'no';
+      field=null; return;
+    }
+    if(field === 'background'){ bgLines.push(line); return; }
+  });
+  data.background = bgLines.join('\n').trim();
+
+  const numPathsM = text.match(/Recommend (.+?) realistic alternative career paths that could leverage my existing experience\./) || text.match(/recommend (.+?) realistic adjacent career paths/);
+  data.numPaths = numPathsM ? numPathsM[1].trim() : '1-4';
+
+  // Section numbers shift with the options chosen, so match on titles only.
+  data.includeRanking = /\*\*\d+\. Career Path Ranking\*\*/.test(text) ? 'yes' : 'no';
+  data.includeHidden = /\*\*\d+\. Hidden Opportunities\*\*/.test(text) ? 'yes' : 'no';
+  data.includeFinal = /\*\*\d+\. Final Recommendation\*\*/.test(text) ? 'yes' : 'no';
+  data.includeRouting = /\*\*\d+\. What's Next\*\*/.test(text) ? 'yes' : 'no';
+
+  return { ok:true, data };
+}
+
+function populateForm(data){
+  document.getElementById('background').value = data.background;
+  document.getElementById('currentRole').value = data.currentRole;
+  document.getElementById('constraints').value = data.constraints;
+  document.getElementById('compFloor').value = data.compFloor;
+  document.getElementById('numPaths').value = data.numPaths || '1-4';
+  document.getElementById('attachResume').checked = !!data.attachResume;
+  document.querySelector(`input[name="analysisMode"][value="${data.analysisMode}"]`).checked = true;
+  document.getElementById('pivotFrom').value = data.pivotFrom;
+  document.getElementById('pivotTo').value = data.pivotTo;
+  document.getElementById('pivotNotes').value = data.pivotNotes;
+  document.getElementById('includeAdjacent').checked = data.includeAdjacent !== false;
+  document.getElementById('includeResumeRepo').checked = data.includeResumeRepo !== false;
+
+  document.querySelector(`input[name="industryLock"][value="${data.industryLock}"]`).checked = true;
+  document.querySelector(`input[name="ruleOutSchooling"][value="${data.ruleOutSchooling}"]`).checked = true;
+  document.querySelector(`input[name="includeRanking"][value="${data.includeRanking}"]`).checked = true;
+  document.querySelector(`input[name="includeHidden"][value="${data.includeHidden}"]`).checked = true;
+  document.querySelector(`input[name="includeFinal"][value="${data.includeFinal}"]`).checked = true;
+  document.querySelector(`input[name="includeRouting"][value="${data.includeRouting}"]`).checked = true;
+
+  render();
+}
+
+document.getElementById('loadPromptBtn').addEventListener('click', () => {
+  document.getElementById('loadPromptInput').click();
+});
+document.getElementById('loadPromptInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  const statusEl = document.getElementById('loadPromptStatus');
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const result = parseLoadedPrompt(reader.result);
+    if(!result.ok){
+      statusEl.textContent = result.reason + ' You can still paste its contents into the fields manually.';
+      return;
+    }
+    populateForm(result.data);
+    statusEl.textContent = `Loaded "${file.name}" — review the fields below, then regenerate.`;
+  };
+  reader.onerror = () => {
+    statusEl.textContent = 'Could not read that file.';
+  };
+  reader.readAsText(file);
+  e.target.value = '';
 });
 
 render();
